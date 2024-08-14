@@ -21,6 +21,16 @@ resource "aws_route53_zone" "primary" {
   name = var.domain_name
 }
 
+# Add Google Workspace MX records
+resource "aws_route53_record" "mx_record" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = var.domain_name
+  type    = "MX"
+  ttl     = "300"
+  records = [
+    "1 SMTP.GOOGLE.COM."
+  ]
+}
 output "nameservers" {
   value       = aws_route53_zone.primary.name_servers
   description = "Custom nameservers provided by Route53."
